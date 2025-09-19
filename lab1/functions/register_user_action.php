@@ -1,12 +1,12 @@
 <?php 
 
-header('Content-type: application/json');
+header('Content-Type: application/json');
 
 session_start();
 
 $response = array();
 
-// TODO: Check if the user is already logged in and redirect to the dashboard
+// Check if the user is already logged in and redirect to the dashboard
 if (isset($_SESSION['user_id'])) {
     $response['status'] = 'error';
     $response['message'] = 'You are already logged in';
@@ -14,7 +14,7 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once '../controllers/user_controller.php';
+require_once '../controllers/customer_controller.php';
 
 $name = $_POST['name'];
 $email = $_POST['email'];
@@ -36,6 +36,5 @@ if ($user_id) {
 }
 
 echo json_encode($response);
-
 
 ?>

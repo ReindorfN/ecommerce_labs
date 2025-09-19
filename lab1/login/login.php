@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Shopping Lab - Registration</title>
+    <title>E-commerce Shopping Lab - Login</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,13 +16,13 @@
             justify-content: center;
         }
         
-        .registration-container {
+        .login-container {
             background: white;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             margin: 20px;
         }
         
@@ -56,8 +56,7 @@
             font-size: 14px;
         }
         
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e1e5e9;
@@ -67,8 +66,7 @@
             box-sizing: border-box;
         }
         
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -78,7 +76,7 @@
             color: #aaa;
         }
         
-        .submit-btn {
+        .login-btn {
             width: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -92,48 +90,69 @@
             margin-top: 10px;
         }
         
-        .submit-btn:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
         
-        .submit-btn:active {
+        .login-btn:active {
             transform: translateY(0);
         }
         
-        .back-link {
+        .form-footer {
             text-align: center;
             margin-top: 20px;
         }
         
-        .back-link a {
+        .form-footer a {
             color: #667eea;
             text-decoration: none;
             font-weight: 500;
         }
         
-        .back-link a:hover {
+        .form-footer a:hover {
             text-decoration: underline;
         }
         
         .required {
             color: #e74c3c;
         }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .forgot-password a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <div class="registration-container">
+    <div class="login-container">
         <div class="form-header">
-            <h1>Create Account</h1>
-            <p>Join our e-commerce platform today</p>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
         </div>
         
-        <form id="registrationForm" action="" method="POST">
-            <div class="form-group">
-                <label for="fullname">Full Name <span class="required">*</span></label>
-                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
-            </div>
-            
+        <form id="loginForm" action="" method="POST">
             <div class="form-group">
                 <label for="email">Email Address <span class="required">*</span></label>
                 <input type="email" id="email" name="email" placeholder="Enter your email address" required>
@@ -141,40 +160,26 @@
             
             <div class="form-group">
                 <label for="password">Password <span class="required">*</span></label>
-                <input type="password" id="password" name="password" placeholder="Create a strong password" required>
-            </div>
-
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password <span class="required">*</span></label>
-                <input type="password" id="confrm_password" name="confirm_password" placeholder="Re-enter your password" required>
-            </div>
-
-
-            <div class="form-group">
-                <label for="country">Country <span class="required">*</span></label>
-                <input type="text" id="country" name="country" required>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
             
-            <div class="form-group">
-                <label for="city">City <span class="required">*</span></label>
-                <input type="text" id="city" name="city" placeholder="Enter your city" required>
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="#forgot">Forgot password?</a>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="contact">Contact Number <span class="required">*</span></label>
-                <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number" required>
-            </div>
-            
-            <button type="submit" class="submit-btn">Create Account</button>
+            <button type="submit" class="login-btn">Sign In</button>
         </form>
         
-        <div class="back-link">
-            <a href="../index.php">← Back to Home</a>
+        <div class="form-footer">
+            <p>Don't have an account? <a href="register.php">Create one here</a></p>
+            <p><a href="../index.php">← Back to Home</a></p>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/register.js"></script>
 </body>
 </html>

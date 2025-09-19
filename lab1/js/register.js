@@ -1,8 +1,8 @@
-$(document).ready(function(){
+$(document).ready(function() {
     $('#registrationForm').submit(function(e) {
         e.preventDefault();
 
-        username = $('#name').val();
+        name = $('#fullname').val();
         email = $('#email').val();
         password = $('#password').val();
         confirm_password = $('#confirm_password').val();
@@ -14,7 +14,7 @@ $(document).ready(function(){
         // Email regex validation
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (username == '' || email == '' || password == '' || confirm_password ==''|| country == '' | city == '' || phone_number == '') {
+        if (name == '' || email == '' || password == '' || confirm_password =='' || country == '' || city == '' || phone_number == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -30,13 +30,13 @@ $(document).ready(function(){
             });
 
             return;
-        } else if(password.test(confirm_password)){ //checking is password is the same as confirm password
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Passwords do not match!',
-            });
-            return;
+        // } else if(confirm_password !== password){ // checking if password is the same as confirm password
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: 'Passwords do not match!',
+        //     });
+        //     return;
         } else if(!emailRegex.test(email)) { //regex for email format
             Swal.fire({
                 icon: 'error',
@@ -44,21 +44,20 @@ $(document).ready(function(){
                 text: 'Please enter a valid email address!',
             });
             return;
-        };
+        }
 
-
-
+        // Submit the form
         $.ajax({
             url: '../functions/register_user_action.php',
             type: 'POST',
             data: {
-                name: username,
+                name: name,
                 email: email,
                 password: password,
                 country: country,
                 city: city,
                 phone_number: phone_number,
-                role: role
+                role: 1
             },
             success: function(response) {
                 if (response.status === 'success') {
@@ -74,7 +73,7 @@ $(document).ready(function(){
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Oops...',
+                        title: 'New error..',
                         text: response.message,
                     });
                 }
@@ -87,8 +86,61 @@ $(document).ready(function(){
                 });
             }
         });
-
-
-
     });
+
+    // Function to validate country and city
+    function validateCountryAndCity(country, city) {
+        return new Promise((resolve, reject) => {
+            // First validate country
+            fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(country)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 404) {
+                        resolve(false);
+                        return;
+                    }
+                    
+                    // If country is valid, validate city
+                    const countryCode = data[0].cca2;
+                    return fetch(`https://api.api-ninjas.com/v1/city?name=${encodeURIComponent(city)}&country=${countryCode}`)
+                        .then(response => response.json())
+                        .then(cityData => {
+                            if (cityData.length > 0) {
+                                resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        });
+                })
+                .catch(error => {
+                    // Fallback: Use a simpler validation approach
+                    const validCountries = [
+                        'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 
+                        'France', 'Italy', 'Spain', 'Japan', 'China', 'India', 'Brazil', 
+                        'Mexico', 'Netherlands', 'Sweden', 'Norway', 'Denmark', 'Finland',
+                        'Switzerland', 'Austria', 'Belgium', 'Poland', 'Czech Republic',
+                        'Hungary', 'Portugal', 'Greece', 'Turkey', 'Russia', 'South Korea',
+                        'Singapore', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines',
+                        'Vietnam', 'New Zealand', 'South Africa', 'Egypt', 'Nigeria',
+                        'Kenya', 'Morocco', 'Argentina', 'Chile', 'Colombia', 'Peru',
+                        'Venezuela', 'Ecuador', 'Uruguay', 'Paraguay', 'Bolivia'
+                    ];
+                    
+                    const isValidCountry = validCountries.some(validCountry => 
+                        validCountry.toLowerCase().includes(country.toLowerCase()) ||
+                        country.toLowerCase().includes(validCountry.toLowerCase())
+                    );
+                    
+                    if (!isValidCountry) {
+                        resolve(false);
+                        return;
+                    }
+                    
+                    // Basic city validation (non-empty and reasonable length)
+                    const isValidCity = city.trim().length >= 2 && city.trim().length <= 50;
+                    resolve(isValidCity);
+                });
+        });
+    }
+
 });
