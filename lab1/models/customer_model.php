@@ -55,5 +55,18 @@ class User extends db_connection{
         }
         return false;
     }
+
+    public function loginUser($email, $password){
+        $stmt = $this->db->prepare("SELECT customer_id, customer_name, customer_email, customer_pass, customer_country, customer_city, customer_contact, user_role FROM customer WHERE customer_email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        
+        if ($result && password_verify($password, $result['customer_pass'])) {
+            return $result;
+        }
+        return false;
+    }
+
 }
 ?>

@@ -181,5 +181,10 @@
             <p><a href="../index.php">← Back to Home</a></p>
         </div>
     </div>
+
+    <!-- Include jQuery and SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/login.js"></script>
 </body>
 </html>

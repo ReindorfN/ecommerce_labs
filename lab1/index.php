@@ -81,8 +81,14 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="#"><button>Login</button></a>
+        <a href="login/login.php"><button>Login</button></a>
         <a href="login/register.php"><button>Register</button></a>
+        <?php
+        session_start();
+        if (isset($_SESSION['user_id'])) {
+            echo "<button id='logoutBtn' name='logoutBtn'>Logout</button>";
+        }
+        ?>
     </nav>
     
     <div class="container">
@@ -92,5 +98,10 @@
             
         </div>
     </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/logout.js"></script>
 </body>
 </html>
