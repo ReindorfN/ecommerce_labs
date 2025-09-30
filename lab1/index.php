@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,13 +83,28 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="login/login.php"><button>Login</button></a>
-        <a href="login/register.php"><button>Register</button></a>
         <?php
         session_start();
-        if (isset($_SESSION['user_id'])) {
-            echo "<button id='logoutBtn' name='logoutBtn'>Logout</button>";
+        if (!isset($_SESSION['user_id'])){
+            echo " <a href='login/login.php'><button>Login</button></a>";
+            echo " <a href='login/register.php'><button>Register</button></a>";
         }
+        if(isset($_SESSION['user_id'])) {
+            // echo "<button id='logoutBtn' name='logoutBtn'>Logout</button>";
+            echo " <a href='functions/logout_user_action.php'><button>logout</button></a>";
+            if (isAdmin()){
+                // echo "<button id='adminBtn' name='adminBtn'>Dashboard</button>";
+                echo " <a href='admin/categoryphp'><button>Dashboard</button></a>";
+            }
+        }
+   
+        // if (isset($_SESSION['user_id'])) {
+        //     echo "<button id='logoutBtn' name='logoutBtn'>Logout</button>";
+        //     if (isAdmin()){
+        //         // echo "<button id='adminBtn' name='adminBtn'>Dashboard</button>";
+        //         echo " <a href='admin/dashboard.php'><button>Dashboard</button></a>";
+        //     }
+        // }
         ?>
     </nav>
     
@@ -98,6 +115,7 @@
             
         </div>
     </div>
+    
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
