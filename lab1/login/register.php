@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Shopping Lab - Registration</title>
+    <title>Skill-Office Africa | Registration</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -164,6 +164,14 @@
                 <label for="contact">Contact Number <span class="required">*</span></label>
                 <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number" required>
             </div>
+
+            <div class="'form-group">
+                <label>
+                    <input type="checkbox" id="role" name="role" value="2">
+                    I am signing up as a vendor
+                </label>
+            </div>
+
             
             <button type="submit" class="submit-btn">Create Account</button>
         </form>

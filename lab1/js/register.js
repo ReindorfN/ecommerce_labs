@@ -9,7 +9,8 @@ $(document).ready(function() {
         country = $('#country').val();
         city = $('#city').val();
         phone_number = $('#phone_number').val();
-        role = $('input[name="role"]:checked').val();
+        
+        var roleValue = $('input[name="role"]').is(':checked') ? 2 : 1; //determine role value based on checkbox
 
         // Email regex validation
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,15 +29,8 @@ $(document).ready(function() {
                 title: 'Oops...',
                 text: 'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, and one number!',
             });
-
             return;
-        // } else if(confirm_password !== password){ // checking if password is the same as confirm password
-        //     Swal.fire({
-        //         icon: 'error',
-        //         title: 'Oops...',
-        //         text: 'Passwords do not match!',
-        //     });
-        //     return;
+
         } else if(!emailRegex.test(email)) { //regex for email format
             Swal.fire({
                 icon: 'error',
@@ -57,7 +51,7 @@ $(document).ready(function() {
                 country: country,
                 city: city,
                 phone_number: phone_number,
-                role: 1
+                role: roleValue
             },
             success: function(response) {
                 if (response.status === 'success') {

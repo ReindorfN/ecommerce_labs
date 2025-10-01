@@ -1,0 +1,11 @@
+To-Do Next
+
+1. Relate category creation to user ids so categories created are unique to each admin user
+
+
+
+To-Do Completed
+1. Dynamically assign roles based on signup input
+2. Category creation, retrieval, update and deletion for admin role users
+3. Ensure session management and eliminating unauthorized access by redirecting to login page if no session is identified.
+4. Ensure all sessions are killed and destroyed after each logout.
