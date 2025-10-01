@@ -1,11 +1,13 @@
-
+<?php
+require_once 'settings/core.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Shopping Lab - Home</title>
+    <title>Skill-Office Africa | Home</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,26 +87,18 @@
     <nav class="navbar">
         <?php
         session_start();
-        if (!isset($_SESSION['user_id'])){
+        if (!isLoggedIn()){
             echo " <a href='login/login.php'><button>Login</button></a>";
             echo " <a href='login/register.php'><button>Register</button></a>";
+        } 
+        if(isLoggedIn()&& isAdmin()){
+            echo " <a href='admin/category.php'><button>Category Dashboard</button></a>";
+            echo " <a href='functions/logout_user_action.php'><button>Logout</button></a>";
         }
-        if(isset($_SESSION['user_id'])) {
-            // echo "<button id='logoutBtn' name='logoutBtn'>Logout</button>";
-            echo " <a href='functions/logout_user_action.php'><button>logout</button></a>";
-            if (isAdmin()){
-                // echo "<button id='adminBtn' name='adminBtn'>Dashboard</button>";
-                echo " <a href='admin/categoryphp'><button>Dashboard</button></a>";
-            }
+        if(isLoggedIn() && !isAdmin()){
+            echo " <a href='functions/logout_user_action.php'><button>Logout</button></a>";
         }
-   
-        // if (isset($_SESSION['user_id'])) {
-        //     echo "<button id='logoutBtn' name='logoutBtn'>Logout</button>";
-        //     if (isAdmin()){
-        //         // echo "<button id='adminBtn' name='adminBtn'>Dashboard</button>";
-        //         echo " <a href='admin/dashboard.php'><button>Dashboard</button></a>";
-        //     }
-        // }
+
         ?>
     </nav>
     

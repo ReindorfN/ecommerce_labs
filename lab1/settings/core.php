@@ -1,4 +1,3 @@
-// Settings/core.php
 <?php
 session_start();
 
@@ -7,10 +6,10 @@ session_start();
 ob_start();
 
 //funtion to check for login
-if (!isset($_SESSION['id'])) {
-    header("Location: login/login.php");
-    exit;
-}
+// if (!isset($_SESSION['id'])) {
+//     header("Location: login/login.php");
+//     exit;
+// }
 
 
 //function to get user ID
