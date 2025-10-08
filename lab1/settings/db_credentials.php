@@ -7,7 +7,7 @@
 //db_name
 
 if(!defined("SERVER")){
-    define("SERVER", "169.239.251.102");
+    define("SERVER", "localhost");
 }
 
 if(!defined('USERNAME')){
