@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 header('Cache-Control: no-cache, must-revalidate');
 
 require_once '../settings/core.php';
-require_once '../controllers/category_controller.php';
+require_once '../controllers/brand_controller.php';
 
 // Check if user is logged in and is admin
 if (!isLoggedIn() || !isAdmin()) {
@@ -14,14 +14,14 @@ if (!isLoggedIn() || !isAdmin()) {
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_category'])) {
-    $category_name = $_POST['category_name'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_brand'])) {
+    $brand_name = $_POST['brand_name'];
     
     // Create controller instance
-    $categoryController = new CategoryController();
+    $brandController = new BrandController();
     
-    // Add category using controller
-    $result = $categoryController->add_category_ctr($category_name);
+    // Adding brand using controller
+    $result = $brandController->add_brand_ctr($brand_name);
     
     // Return JSON response
     echo json_encode($result);
@@ -32,4 +32,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_category'])) {
 // Ensure clean output
 ob_end_flush();
 exit;
+
 ?>

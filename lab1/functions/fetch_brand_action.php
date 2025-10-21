@@ -1,23 +1,24 @@
 <?php
 require_once '../settings/core.php';
-require_once '../controllers/category_controller.php';
+require_once '../controllers/brand_controller.php';
 
-// Function to fetch categories (for direct inclusion)
-function fetchCategoriesForDisplay() {
+// function to fetch brands
+function fetchBrandsForDisplay() {
     // Check if user is logged in and is admin
     if (!isLoggedIn() || !isAdmin()) {
         return [];
     }
 
     // Create controller instance
-    $categoryController = new CategoryController();
+    $brandController = new BrandController();
     
     // Fetch existing categories using the controller method
-    return $categoryController->fetch_categories_ctr();
+    return $brandController->fetch_brands_ctr();
 }
 
-// Function to handle AJAX requests for categories
-function handleCategoryAjaxRequest() {
+
+// Function to handle AJAX requests for brands
+function handleBrandAjaxRequest() {
     // Ensure clean output buffer
     ob_clean();
 
@@ -32,16 +33,16 @@ function handleCategoryAjaxRequest() {
     }
 
     // Create controller instance
-    $categoryController = new CategoryController();
+    $brandController = new BrandController();
 
-    // Fetch existing categories using the controller method
-    $categories = $categoryController->fetch_categories_ctr();
+    // Fetch existing brandsusing the controller method
+    $brands = $brandController->fetch_brands_ctr();
 
     // Return JSON response with success status
     echo json_encode([
         'success' => true,
-        'data' => $categories,
-        'count' => count($categories)
+        'data' => $brands,
+        'count' => count($brands)
     ]);
 
     // Ensure clean output
@@ -51,5 +52,7 @@ function handleCategoryAjaxRequest() {
 
 // If this is an AJAX request, handle it
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    handleCategoryAjaxRequest();
+    handleBrandAjaxRequest();
 }
+
+?>

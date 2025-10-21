@@ -9,9 +9,11 @@ if (!isLoggedIn() || !isAdmin()) {
 
 // Include the fetch action functions
 require_once '../functions/fetch_category_action.php';
+require_once '../functions/fetch_brand_action.php';
 
-// Fetch categories using the function
+// Fetch categories and brands using the functions
 $categories = fetchCategoriesForDisplay();
+$brands = fetchBrandsForDisplay();
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +21,7 @@ $categories = fetchCategoriesForDisplay();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skill-Office Africa | Admin</title>
+    <title>Skill-Office Africa | Admin - Categories & Brands</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -74,14 +76,30 @@ $categories = fetchCategoriesForDisplay();
             transform: translateY(0);
         }
         
-        .container {
-            max-width: 1200px;
+        .main-container {
+            max-width: 1400px;
             margin: 100px auto 50px auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
+            padding: 30px;
+        }
+        
+        .categories-container {
+            border-left: 5px solid #28a745;
+        }
+        
+        .brands-container {
+            border-left: 5px solid #ff6b6b;
+            /* background: linear-gradient(135deg, rgba(255, 43, 107, 0.05) 0%, rgba(255, 193, 7, 0.05) 100%); */
         }
         
         .header {
@@ -135,7 +153,29 @@ $categories = fetchCategoriesForDisplay();
             transform: translateY(0);
         }
         
-        .categories-grid {
+        .add-brand-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .add-brand-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .add-brand-btn:active {
+            transform: translateY(0);
+        }
+        
+        .categories-grid, .brands-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
@@ -149,6 +189,18 @@ $categories = fetchCategoriesForDisplay();
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             border: 1px solid #e9ecef;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #28a745, #20c997);
         }
         
         .category-card:hover {
@@ -156,27 +208,53 @@ $categories = fetchCategoriesForDisplay();
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        .category-name {
+        .brand-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+        }
+        
+        .brand-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.2);
+        }
+        
+        .category-name, .brand-name {
             font-size: 1.2rem;
             font-weight: 600;
             color: #333;
             margin: 0 0 10px 0;
         }
         
-        .category-id {
+        .category-id, .brand-id {
             font-size: 0.9rem;
             color: #666;
             margin: 0 0 15px 0;
         }
         
-        .category-actions {
+        .category-actions, .brand-actions {
             display: flex;
             gap: 10px;
             justify-content: flex-end;
             margin-top: 10px;
         }
         
-        .edit-category-btn, .delete-category-btn {
+        .edit-category-btn, .delete-category-btn, .edit-brand-btn, .delete-brand-btn {
             background: none;
             border: none;
             cursor: pointer;
@@ -190,17 +268,17 @@ $categories = fetchCategoriesForDisplay();
             height: 36px;
         }
         
-        .edit-category-btn:hover {
+        .edit-category-btn:hover, .edit-brand-btn:hover {
             background-color: #e3f2fd;
             transform: scale(1.1);
         }
         
-        .delete-category-btn:hover {
+        .delete-category-btn:hover, .delete-brand-btn:hover {
             background-color: #ffebee;
             transform: scale(1.1);
         }
         
-        .edit-category-btn span, .delete-category-btn span {
+        .edit-category-btn span, .delete-category-btn span, .edit-brand-btn span, .delete-brand-btn span {
             font-size: 1.2em;
             line-height: 1;
         }
@@ -371,8 +449,12 @@ $categories = fetchCategoriesForDisplay();
         }
         
         @media (max-width: 768px) {
-            .container {
+            .main-container {
                 margin: 80px 10px 20px 10px;
+                padding: 15px;
+            }
+            
+            .container {
                 padding: 15px;
             }
             
@@ -381,11 +463,11 @@ $categories = fetchCategoriesForDisplay();
                 align-items: stretch;
             }
             
-            .add-category-btn {
+            .add-category-btn, .add-brand-btn {
                 width: 100%;
             }
             
-            .categories-grid {
+            .categories-grid, .brands-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -399,46 +481,88 @@ $categories = fetchCategoriesForDisplay();
 <body>
     <nav class="navbar">
         <a href="../index.php"><button>Home</button></a>
+        <!-- <a href="brand.php"><button>Brands</button></a> -->
         <a href="../functions/logout_user_action.php"><button>Logout</button></a>
     </nav>
     
-    <div class="container">
-        <div class="header">
-            <h1>Category Management</h1>
-            <p>Manage your shop's product categories</p>
-        </div>
-        
+    <div class="main-container">
         <div id="alert-container"></div>
         
-        <div class="action-bar">
-            <button class="add-category-btn" onclick="openModal()">
-                ➕ Add New Category
-            </button>
+        <!-- Categories Section -->
+        <div class="container categories-container">
+            <div class="header">
+                <h1>📁 Category Management</h1>
+                <p>Organize your products with categories</p>
+            </div>
+            
+            <div class="action-bar">
+                <button class="add-category-btn" onclick="openCategoryModal()">
+                    ➕ Add New Category
+                </button>
+            </div>
+            
+            <?php if (empty($categories)): ?>
+                <div class="empty-state">
+                    <h3>No Categories Yet</h3>
+                    <p>Start by adding your first product category to organize your shop.</p>
+                </div>
+            <?php else: ?>
+                <div class="categories-grid">
+                    <?php foreach ($categories as $category): ?>
+                        <div class="category-card">
+                            <h3 class="category-name"><?php echo htmlspecialchars($category['cat_name']); ?></h3>
+                            <p class="category-id">ID: <?php echo $category['cat_id']; ?></p>
+                            <div class="category-actions">
+                                <button class="edit-category-btn" title="Edit" data-cat-id="<?php echo $category['cat_id']; ?>" data-cat-name="<?php echo htmlspecialchars($category['cat_name']); ?>">
+                                    <span aria-label="Edit">&#9998;</span>
+                                </button>
+                                <button class="delete-category-btn" title="Delete" data-cat-id="<?php echo $category['cat_id']; ?>">
+                                    <span aria-label="Delete">&#128465;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
         
-        <?php if (empty($categories)): ?>
-            <div class="empty-state">
-                <h3>No Categories Yet</h3>
-                <p>Start by adding your first product category to organize your shop.</p>
+        <!-- Brands Section -->
+        <div class="container brands-container">
+            <div class="header">
+                <h1>🏷️ Brand Management</h1>
+                <p>Manage product brands and manufacturers</p>
             </div>
-        <?php else: ?>
-            <div class="categories-grid">
-                <?php foreach ($categories as $category): ?>
-                    <div class="category-card">
-                        <h3 class="category-name"><?php echo htmlspecialchars($category['cat_name']); ?></h3>
-                        <p class="category-id">ID: <?php echo $category['cat_id']; ?></p>
-                        <div class="category-actions">
-                            <button class="edit-category-btn" title="Edit" data-cat-id="<?php echo $category['cat_id']; ?>" data-cat-name="<?php echo htmlspecialchars($category['cat_name']); ?>">
-                                <span aria-label="Edit">&#9998;</span>
-                            </button>
-                            <button class="delete-category-btn" title="Delete" data-cat-id="<?php echo $category['cat_id']; ?>">
-                                <span aria-label="Delete">&#128465;</span>
-                            </button>
+            
+            <div class="action-bar">
+                <button class="add-brand-btn" onclick="openBrandModal()">
+                    ➕ Add New Brand
+                </button>
+            </div>
+            
+            <?php if (empty($brands)): ?>
+                <div class="empty-state">
+                    <h3>No Brands Yet</h3>
+                    <p>Start by adding your first product brand to organize your shop.</p>
+                </div>
+            <?php else: ?>
+                <div class="brands-grid">
+                    <?php foreach ($brands as $brand): ?>
+                        <div class="brand-card">
+                            <h3 class="brand-name"><?php echo htmlspecialchars($brand['brand_name']); ?></h3>
+                            <p class="brand-id">ID: <?php echo $brand['brand_id']; ?></p>
+                            <div class="brand-actions">
+                                <button class="edit-brand-btn" title="Edit" data-brand-id="<?php echo $brand['brand_id']; ?>" data-brand-name="<?php echo htmlspecialchars($brand['brand_name']); ?>">
+                                    <span aria-label="Edit">&#9998;</span>
+                                </button>
+                                <button class="delete-brand-btn" title="Delete" data-brand-id="<?php echo $brand['brand_id']; ?>">
+                                    <span aria-label="Delete">&#128465;</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
     
     <!-- Add Category Modal -->
@@ -446,7 +570,7 @@ $categories = fetchCategoriesForDisplay();
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Add New Category</h2>
-                <span class="close" onclick="closeModal()">&times;</span>
+                <span class="close" onclick="closeCategoryModal()">&times;</span>
             </div>
             <div class="modal-body">
                 <form id="categoryForm">
@@ -457,7 +581,7 @@ $categories = fetchCategoriesForDisplay();
                                maxlength="100">
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Cancel</button>
                         <button type="submit" name="add_category" class="btn btn-primary">Add Category</button>
                     </div>
                 </form>
@@ -470,7 +594,7 @@ $categories = fetchCategoriesForDisplay();
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Edit Category</h2>
-                <span class="close" onclick="closeEditModal()">&times;</span>
+                <span class="close" onclick="closeEditCategoryModal()">&times;</span>
             </div>
             <div class="modal-body">
                 <form id="editCategoryForm">
@@ -482,8 +606,57 @@ $categories = fetchCategoriesForDisplay();
                                maxlength="100">
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditCategoryModal()">Cancel</button>
                         <button type="submit" name="update_category" class="btn btn-primary">Update Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Brand Modal -->
+    <div id="brandModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Brand</h2>
+                <span class="close" onclick="closeBrandModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="brandForm">
+                    <div class="form-group">
+                        <label for="brand_name">Brand Name</label>
+                        <input type="text" id="brand_name" name="brand_name" required 
+                               placeholder="Enter brand name (e.g., Apple, Samsung, Nike)" 
+                               maxlength="100">
+                    </div>
+                    <div class="form-actions"> 
+                        <button type="button" class="btn btn-secondary" onclick="closeBrandModal()">Cancel</button>
+                        <button type="submit" name="add_brand" class="btn btn-primary">Add Brand</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Brand Modal -->
+    <div id="editBrandModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Brand</h2>
+                <span class="close" onclick="closeEditBrandModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editBrandForm">
+                    <input type="hidden" id="edit_brand_id" name="brand_id">
+                    <div class="form-group">
+                        <label for="edit_brand_name">Brand Name</label>
+                        <input type="text" id="edit_brand_name" name="brand_name" required 
+                               placeholder="Enter brand name (e.g., Apple, Samsung, Nike)" 
+                               maxlength="100">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeEditBrandModal()">Cancel</button>
+                        <button type="submit" name="update_brand" class="btn btn-primary">Update Brand</button>
                     </div>
                 </form>
             </div>
@@ -493,6 +666,6 @@ $categories = fetchCategoriesForDisplay();
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src = "../js/category.js"> </script>
+    <script src="../js/unified_management.js"></script>
 </body>
 </html>

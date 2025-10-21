@@ -6,6 +6,9 @@
 //password
 //db_name
 
+
+// server
+
 if(!defined("SERVER")){
     define("SERVER", "localhost");
 }
@@ -21,4 +24,24 @@ if(!defined('PASSWD')){
 if(!defined('DB_NAME')){
     define('DB_NAME', 'ecommerce_2025A_reindorf_narh');
 }
+
+
+
+// local host
+// if(!defined("SERVER")){
+//     define("SERVER", "localhost");
+// }
+
+// if(!defined('USERNAME')){
+//     define('USERNAME', 'root');
+// }
+
+// if(!defined('PASSWD')){
+//     define('PASSWD', '');
+// }
+
+// if(!defined('DB_NAME')){
+//     define('DB_NAME', 'shopping');
+// }
+
 ?>
