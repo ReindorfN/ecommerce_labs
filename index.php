@@ -94,6 +94,7 @@ require_once 'settings/core.php';
         if(isLoggedIn()&& isAdmin()){
             echo " <a href='admin/category.php'><button>Category Dashboard</button></a>";
             echo " <a href='admin/brand.php'><button>Brands Dashboard</button></a>";
+            echo " <a href='admin/product.php'><button>Product Dashboard</button></a>";
             echo " <a href='functions/logout_user_action.php'><button>Logout</button></a>";
             
         }
