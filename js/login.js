@@ -46,10 +46,11 @@ $(document).ready(function() {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirect based on user role
-                            if (response.user_data.role === 1) {
-                                window.location.href = '../index.php'; // Admin dashboard
+                            // Role 2 = Admin, Role 1 = Regular User
+                            if (response.user_data.role === 2) {
+                                window.location.href = '../admin/category.php'; // Admin dashboard
                             } else {
-                                window.location.href = '../index.php'; // Customer dashboard
+                                window.location.href = '../views/all_products.php'; // Customer - All Products page
                             }
                         }
                     });

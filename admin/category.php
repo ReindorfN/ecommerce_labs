@@ -481,7 +481,7 @@ $brands = fetchBrandsForDisplay();
 <body>
     <nav class="navbar">
         <a href="../index.php"><button>Home</button></a>
-        <!-- <a href="brand.php"><button>Brands</button></a> -->
+        <a href="product.php"><button>Product Dashboard</button></a>
         <a href="../functions/logout_user_action.php"><button>Logout</button></a>
     </nav>
     

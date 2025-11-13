@@ -1,5 +1,8 @@
 <?php
 require_once 'settings/core.php';
+// Redirect to products page as the default landing page
+header("Location: views/all_products.php");
+exit;
 ?>
 
 <!DOCTYPE html>
@@ -92,13 +95,14 @@ require_once 'settings/core.php';
             echo " <a href='login/register.php'><button>Register</button></a>";
         } 
         if(isLoggedIn()&& isAdmin()){
-            echo " <a href='admin/category.php'><button>Category Dashboard</button></a>";
-            echo " <a href='admin/brand.php'><button>Brands Dashboard</button></a>";
+            echo " <a href='admin/category.php'><button>Category & Brands</button></a>";
+            // echo " <a href='admin/brand.php'><button>Brands Dashboard</button></a>";
             echo " <a href='admin/product.php'><button>Product Dashboard</button></a>";
             echo " <a href='functions/logout_user_action.php'><button>Logout</button></a>";
             
         }
         if(isLoggedIn() && !isAdmin()){
+            echo " <a href='views/all_products.php'><button>All Products</button></a>";
             echo " <a href='functions/logout_user_action.php'><button>Logout</button></a>";
         }
 

@@ -210,6 +210,123 @@ class Product extends db_connection{
             return ['success' => false, 'message' => "Database connection failed."];
         }
     }
+
+    //View all products
+    public function view_all_products()
+    {
+        $products = [];
+
+        if ($this->db_connect()) {
+            $stmt = $this->db->prepare("SELECT * FROM products ORDER BY product_id DESC");
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $products[] = $row;
+                }
+            }
+
+            $stmt->close();
+        }
+
+        return $products;
+    }
+
+    //Search products by query (searches in title, description, and keywords)
+    public function search_products($query)
+    {
+        $products = [];
+
+        if ($this->db_connect()) {
+            // Sanitize the search query
+            $searchQuery = '%' . trim($query) . '%';
+            
+            $stmt = $this->db->prepare("SELECT * FROM products 
+                WHERE product_title LIKE ? 
+                OR product_desc LIKE ? 
+                OR product_keywords LIKE ?
+                ORDER BY product_title ASC");
+            $stmt->bind_param("sss", $searchQuery, $searchQuery, $searchQuery);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $products[] = $row;
+                }
+            }
+
+            $stmt->close();
+        }
+
+        return $products;
+    }
+
+    //Filter products by category
+    public function filter_products_by_category($cat_id)
+    {
+        $products = [];
+
+        if ($this->db_connect()) {
+            $stmt = $this->db->prepare("SELECT * FROM products WHERE product_cat = ? ORDER BY product_title ASC");
+            $stmt->bind_param("i", $cat_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $products[] = $row;
+                }
+            }
+
+            $stmt->close();
+        }
+
+        return $products;
+    }
+
+    //Filter products by brand
+    public function filter_products_by_brand($brand_id)
+    {
+        $products = [];
+
+        if ($this->db_connect()) {
+            $stmt = $this->db->prepare("SELECT * FROM products WHERE product_brand = ? ORDER BY product_title ASC");
+            $stmt->bind_param("i", $brand_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $products[] = $row;
+                }
+            }
+
+            $stmt->close();
+        }
+
+        return $products;
+    }
+
+    //View single product by ID
+    public function view_single_product($id)
+    {
+        if ($this->db_connect()) {
+            $stmt = $this->db->prepare("SELECT * FROM products WHERE product_id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result && $result->num_rows > 0) {
+                $product = $result->fetch_assoc();
+                $stmt->close();
+                return $product;
+            }
+            $stmt->close();
+        }
+        return null;
+    }
 }
 
 ?>

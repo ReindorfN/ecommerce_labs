@@ -174,8 +174,82 @@ class ProductController{
         if (!is_numeric($product_id) || $product_id <= 0) {
             return null;
         }
-        //Using the model to delete products
+        //Using the model to get product by ID
         return $this->productModel->getProductById($product_id);
+    }
+
+    // View all products controller method
+    public function view_all_products_ctr() {
+        try {
+            return $this->productModel->view_all_products();
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    // Search products controller method
+    public function search_products_ctr($query) {
+        // Validate search query
+        if (empty(trim($query))) {
+            return [];
+        }
+
+        // Sanitize the search query
+        $query = trim($query);
+
+        try {
+            return $this->productModel->search_products($query);
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    // Filter products by category controller method
+    public function filter_products_by_category_ctr($cat_id) {
+        // Validate category ID
+        if (!is_numeric($cat_id) || $cat_id <= 0) {
+            return [];
+        }
+
+        $cat_id = intval($cat_id);
+
+        try {
+            return $this->productModel->filter_products_by_category($cat_id);
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    // Filter products by brand controller method
+    public function filter_products_by_brand_ctr($brand_id) {
+        // Validate brand ID
+        if (!is_numeric($brand_id) || $brand_id <= 0) {
+            return [];
+        }
+
+        $brand_id = intval($brand_id);
+
+        try {
+            return $this->productModel->filter_products_by_brand($brand_id);
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    // View single product controller method
+    public function view_single_product_ctr($id) {
+        // Validate product ID
+        if (!is_numeric($id) || $id <= 0) {
+            return null;
+        }
+
+        $id = intval($id);
+
+        try {
+            return $this->productModel->view_single_product($id);
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
 }
