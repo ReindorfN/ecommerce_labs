@@ -434,8 +434,12 @@ foreach ($cartItems as $item) {
                     <span id="checkoutTotal">GH₵<?php echo number_format($totalAmount, 2); ?></span>
                 </div>
                 
-                <button class="simulate-payment-btn" id="simulatePaymentBtn" onclick="showPaymentModal()">
-                    💳 Simulate Payment
+                <button class="simulate-payment-btn" id="paystackBtn" onclick="processPaystackPayment()" style="background: linear-gradient(135deg, #007bff, #0056b3); margin-bottom: 15px;">
+                    💳 Pay with Paystack
+                </button>
+                
+                <button class="simulate-payment-btn" id="simulatePaymentBtn" onclick="showPaymentModal()" style="background: linear-gradient(135deg, #6c757d, #5a6268);">
+                    🔧 Simulate Payment (Test)
                 </button>
                 
                 <a href="cart.php" class="back-to-cart">← Back to Cart</a>

@@ -52,13 +52,19 @@ class Order extends db_connection{
     // Expected parameters: order_id, amount, customer_id, currency
     public function recordPayment($order_id, $amount, $customer_id, $currency = 'GHS') {
         if ($this->db_connect()) {
-            // Table name is 'payment' not 'payments'
-            // Fields: pay_id (auto), amt, customer_id, order_id, currency, payment_date
-            // Using CURDATE() for date field (not datetime)
             $stmt = $this->db->prepare("INSERT INTO payment (order_id, amt, customer_id, currency, payment_date) VALUES (?, ?, ?, ?, CURDATE())");
-            $stmt->bind_param("idss", $order_id, $amount, $customer_id, $currency);
+            // Parameter types: i=integer (order_id), d=double (amt), i=integer (customer_id), s=string (currency)
+            $stmt->bind_param("idis", $order_id, $amount, $customer_id, $currency);
             
             $result = $stmt->execute();
+            
+            // Check for errors and log them
+            if (!$result) {
+                error_log("Payment insertion error: " . $stmt->error);
+                $stmt->close();
+                return false;
+            }
+            
             $stmt->close();
             
             if ($result) {

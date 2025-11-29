@@ -210,6 +210,78 @@ function handlePageTransition(transitionType) {
     }
 }
 
+// Process Paystack payment
+function processPaystackPayment() {
+    if (isProcessing) {
+        return;
+    }
+
+    isProcessing = true;
+    
+    // Disable buttons
+    const paystackBtn = document.getElementById('paystackBtn');
+    const simulateBtn = document.getElementById('simulatePaymentBtn');
+    
+    if (paystackBtn) paystackBtn.disabled = true;
+    if (simulateBtn) simulateBtn.disabled = true;
+    
+    // Show loading state
+    Swal.fire({
+        title: 'Initializing Payment...',
+        text: 'Please wait while we set up your payment',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Send async request to initialize Paystack payment
+    $.ajax({
+        url: '../functions/initialize_paystack.php',
+        method: 'POST',
+        dataType: 'json',
+        success: function(response) {
+            isProcessing = false;
+            
+            if (response.success && response.authorization_url) {
+                // Redirect to Paystack payment page
+                window.location.href = response.authorization_url;
+            } else {
+                // Show error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Payment Initialization Failed',
+                    text: response.message || 'Failed to initialize payment. Please try again.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#dc3545'
+                });
+                
+                // Re-enable buttons
+                if (paystackBtn) paystackBtn.disabled = false;
+                if (simulateBtn) simulateBtn.disabled = false;
+            }
+        },
+        error: function(xhr, status, error) {
+            isProcessing = false;
+            
+            console.error('Paystack initialization error:', error);
+            
+            // Show error message
+            Swal.fire({
+                icon: 'error',
+                title: 'Payment Error',
+                text: 'An error occurred while initializing payment. Please try again.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#dc3545'
+            });
+            
+            // Re-enable buttons
+            if (paystackBtn) paystackBtn.disabled = false;
+            if (simulateBtn) simulateBtn.disabled = false;
+        }
+    });
+}
+
 // Initialize on page load
 $(document).ready(function() {
     handlePageTransition();
