@@ -462,7 +462,7 @@ foreach ($cartItems as $item) {
             <div class="cart-actions">
                 <a href="all_products.php" class="action-btn continue-shopping">Continue Shopping</a>
                 <?php if (isLoggedIn()): ?>
-                    <a href="#" class="action-btn proceed-checkout" onclick="event.preventDefault(); alert('Checkout functionality coming soon!'); return false;">Proceed to Checkout</a>
+                    <a href="checkout.php" class="action-btn proceed-checkout">Proceed to Checkout</a>
                 <?php else: ?>
                     <a href="../login/login.php" class="action-btn proceed-checkout" style="background: linear-gradient(135deg, #ffc107, #ff9800);">Login to Checkout</a>
                 <?php endif; ?>
